@@ -1,0 +1,84 @@
+// Temperatura DHT y sensor de humedad
+// Unificado Biblioteca Ejemplo Sensor
+// Escrito por Tony DiCola para las Industrias Adafruit
+// Publicado bajo una licencia MIT.
+
+// depende de las siguientes librerías de Arduino:
+// - Adafruit Biblioteca sensor Unificado: https://github.com/adafruit/Adafruit_Sensor
+// - Biblioteca del sensor DHT: https://github.com/adafruit/DHT-sensor-library
+
+# Incluir  < Adafruit_Sensor.h >
+# Incluir  < DHT.h >
+# Incluir  < DHT_U.h >
+
+# Definir  DHTPIN             2          // Pin que está conectado al sensor de DHT.
+
+// Uncomment del tipo de sensor en uso:
+// #define DHTTYPE DHT11 // 11 DHT
+# Definir  DHTTYPE            DHT22      // DHT 22 (AM2302)
+// #define DHTTYPE DHT21 // DHT 21 (AM2301)
+
+// Ver guía para obtener información sobre el cableado del sensor y su uso:
+//    https://learn.adafruit.com/dht/overview
+
+DHT_Unified DHT (DHTPIN, DHTTYPE);
+
+uint32_t delayMS;
+
+vacío  configuración () {
+  De serie. empezar ( 9600 );
+  // Inicializar dispositivo.
+  DHT. iniciar ();
+  De serie. println ( " DHTxx Unified Ejemplo Sensor " );
+  // temperatura Imprimir los detalles del sensor.
+  sensor_t sensor;
+  DHT. temperatura (). getSensor (y sensor);
+  De serie. println ( " ------------------------------------ " );
+  De serie. println ( " Temperatura " );
+  De serie. print   ( " Sensor:        " ); De serie. println (. sensor nombre );
+  De serie. print   ( " Conductor Ver:    " ); De serie. println (sensor. versión );
+  De serie. print   ( " Steam ID:     " ); De serie. println (sensor. sensor_id );
+  De serie. print   ( " Valor Máximo:     " ); De serie. impresión (. sensor MAX_VALUE ); De serie. println ( " * C " );
+  De serie. print   ( " Valor Mínimo:     " ); De serie. impresión (. sensor MIN_VALUE ); De serie. println ( " * C " );
+  De serie. print   ( " Resolución:    " ); De serie. impresión (. sensor resolución ); De serie. println ( " * C " );  
+  De serie. println ( " ------------------------------------ " );
+  // Imprimir los detalles del sensor de humedad.
+  DHT. humedad (). getSensor (y sensor);
+  De serie. println ( " ------------------------------------ " );
+  De serie. println ( " Humedad " );
+  De serie. print   ( " Sensor:        " ); De serie. println (. sensor nombre );
+  De serie. print   ( " Conductor Ver:    " ); De serie. println (sensor. versión );
+  De serie. print   ( " Steam ID:     " ); De serie. println (sensor. sensor_id );
+  De serie. print   ( " Valor Máximo:     " ); De serie. impresión (. sensor MAX_VALUE ); De serie. println ( " % " );
+  De serie. print   ( " Valor Mínimo:     " ); De serie. impresión (. sensor MIN_VALUE ); De serie. println ( " % " );
+  De serie. print   ( " Resolución:    " ); De serie. impresión (. sensor resolución ); De serie. println ( " % " );  
+  De serie. println ( " ------------------------------------ " );
+  // retardo entre lecturas de los sensores basados en los detalles del sensor Set.
+  delayMS = sensor. min_delay / 1000 ;
+}
+
+void  loop () {
+  // Retardo entre mediciones.
+  retraso (delayMS);
+  // Obtener evento temperatura e imprimir su valor.
+  sensors_event_t evento;  
+  DHT. temperatura (). getEvent (y eventos);
+  si ( isnan (evento. temperatura )) {
+    De serie. println ( " temperatura Error al leer! " );
+  }
+  otra cosa {
+    De serie. impresión ( " Temperatura: " );
+    De serie. impresión (. evento temperatura );
+    De serie. println ( " * C " );
+  }
+  // Obtener evento humedad e imprimir su valor.
+  DHT. humedad (). getEvent (y eventos);
+  si ( isnan (evento. relative_humidity )) {
+    De serie. println ( " Lectura de humedad Error! " );
+  }
+  otra cosa {
+    De serie. print ( " Humedad: " );
+    De serie. impresión (. evento relative_humidity );
+    De serie. println ( " % " );
+  }
+}
